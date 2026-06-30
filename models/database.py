@@ -10,7 +10,13 @@ from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 from datetime import datetime
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+asyncpg://user:pass@localhost/hotspot")
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL is not set. In Railway, add a PostgreSQL database "
+        "to this project and ensure it's linked to this service "
+        "(Variables tab should show DATABASE_URL automatically)."
+    )
 # Railway gives postgres:// — fix for asyncpg
 DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://").replace("postgres://", "postgresql+asyncpg://")
 
